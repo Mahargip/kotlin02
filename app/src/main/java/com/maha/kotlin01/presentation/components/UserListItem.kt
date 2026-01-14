@@ -11,20 +11,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 
 @Composable
 fun UserListItem(
     name: String,
     description: String,
+    avatarUrl: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -37,19 +39,21 @@ fun UserListItem(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onClick() }
-            .padding(12.dp)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.Person,
-            contentDescription = "Person",
+        AsyncImage(
+            model = avatarUrl,
+            contentDescription = "User Avatar",
             modifier = Modifier
                 .size(60.dp)
+                .clip(CircleShape)
                 .border(
                     width = 2.dp,
                     color = MaterialTheme.colorScheme.primary,
                     shape = CircleShape
-                )
-                .padding(12.dp)
+                ),
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -57,7 +61,8 @@ fun UserListItem(
         Column {
             Text(
                 text = name,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = description,
